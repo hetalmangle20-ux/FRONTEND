@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T-Shirt Product Viewer</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+}
+
+/* Navbar */
+
+.navbar {
+    background: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.navbar span {
+    color: #e63946;
+}
+
+/* Main product section */
+
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+}
+
+/* Product image */
+
+.gallery {
+    display: flex;
+    gap: 15px;
+}
+
+.thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.thumb {
+    width: 75px;
+    height: 75px;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.thumb.active {
+    border: 2px solid #e63946;
+}
+
+.product-image {
+    flex: 1;
+    min-width: 0;
+    height: 480px;
+    background: white;
+    border-radius: 12px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.product-image svg {
+    width: 85%;
+    height: 85%;
+    transition: opacity 0.25s ease, transform 0.3s ease;
+}
+
+.product-image.changing svg {
+    opacity: 0;
+    transform: scale(0.94);
+}
+
+.view-label {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: #222;
+    color: white;
+    padding: 9px 16px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+/* SVG T-shirt */
+
+.shirt {
+    width: 100%;
+    height: 100%;
+}
+
+.shirt-shape {
+    fill: #e63946;
+    stroke: #b51f2c;
+    stroke-width: 3;
+    stroke-linejoin: round;
+}
+
+.shirt-detail {
+    fill: none;
+    stroke: #ffb3b8;
+    stroke-width: 3;
+}
+
+/* Product details */
+
+.details h1 {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.rating {
+    color: #e89b00;
+    margin-bottom: 20px;
+}
+
+.price {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.old-price {
+    font-size: 17px;
+    color: #999;
+    text-decoration: line-through;
+    margin-left: 10px;
+}
+
+.description {
+    color: #666;
+    line-height: 1.7;
+    margin: 20px 0;
+}
+
+.details h3 {
+    margin: 20px 0 12px;
+}
+
+.sizes {
+    display: flex;
+    gap: 12px;
+}
+
+.size {
+    padding: 12px 18px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.size.active {
+    border: 2px solid #e63946;
+    color: #e63946;
+}
+
+.cart-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 30px;
+    background: #e63946;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.cart-btn:hover {
+    background: #c92e3a;
+}
+
+@media(max-width: 750px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .product-image {
+        height: 350px;
+    }
+
+    .thumb {
+        width: 55px;
+        height: 55px;
+    }
+
+    .details h1 {
+        font-size: 26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">STYLE<span>HUB</span></div>
+    <div>🛒 Cart</div>
+</header>
+
+<main class="container">
+
+    <!-- PRODUCT GALLERY -->
+
+    <section class="gallery">
+
+        <div class="thumbnails">
+
+            <button class="thumb active" data-view="front">Front</button>
+            <button class="thumb" data-view="back">Back</button>
+            <button class="thumb" data-view="left">Left</button>
+            <button class="thumb" data-view="right">Right</button>
+            <button class="thumb" data-view="top">Top</button>
+            <button class="thumb" data-view="bottom">Bottom</button>
+
+        </div>
+
+        <div class="product-image" id="productImage">
+
+            <svg id="shirtSVG" viewBox="0 0 400 400">
+
+                <g id="shirtDrawing">
+
+                    <!-- Front T-shirt -->
+                    <path class="shirt-shape" d="
+                    M125 75
+                    L165 45
+                    Q200 90 235 45
+                    L275 75
+                    L355 130
+                    L315 195
+                    L275 170
+                    L275 345
+                    L125 345
+                    L125 170
+                    L85 195
+                    L45 130
+                    Z"/>
+
+                    <!-- Neck design -->
+                    <path class="shirt-detail"
+                    d="M165 45 Q200 110 235 45"/>
+
+                </g>
+
+            </svg>
+
+            <div class="view-label" id="viewLabel">
+                Front View
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PRODUCT DETAILS -->
+
+    <section class="details">
+
+        <h1>Classic Cotton T-Shirt</h1>
+
+        <div class="rating">★★★★★ (120 Reviews)</div>
+
+        <div class="price">
+            ₹799
+            <span class="old-price">₹1,199</span>
+        </div>
+
+        <p class="description">
+            Premium quality cotton T-shirt with comfortable fitting.
+            Perfect for everyday wear. Available in multiple sizes.
+        </p>
+
+        <h3>Select Size</h3>
+
+        <div class="sizes">
+            <button class="size">S</button>
+            <button class="size active">M</button>
+            <button class="size">L</button>
+            <button class="size">XL</button>
+        </div>
+
+        <button class="cart-btn" id="cartBtn">
+            Add to Cart
+        </button>
+
+    </section>
+
+</main>
+
+
+<script>
+
+const buttons = document.querySelectorAll(".thumb");
+const svg = document.getElementById("shirtSVG");
+const drawing = document.getElementById("shirtDrawing");
+const label = document.getElementById("viewLabel");
+const image = document.getElementById("productImage");
+
+const views = {
+
+    front: {
+        name: "Front View",
+        transform: "none",
+        shape: `
+        <path class="shirt-shape" d="
+        M125 75 L165 45 Q200 90 235 45 L275 75
+        L355 130 L315 195 L275 170 L275 345
+        L125 345 L125 170 L85 195 L45 130 Z"/>
+        <path class="shirt-detail" d="M165 45 Q200 110 235 45"/>
+        `
+    },
+
+    back: {
+        name: "Back View",
+        transform: "none",
+        shape: `
+        <path class="shirt-shape" d="
+        M125 75 L165 45 Q200 90 235 45 L275 75
+        L355 130 L315 195 L275 170 L275 345
+        L125 345 L125 170 L85 195 L45 130 Z"/>
+        <path class="shirt-detail" d="M130 95 Q200 135 270 95"/>
+        `
+    },
+
+    left: {
+        name: "Left Side View",
+        transform: "scaleX(0.55)",
+        shape: `
+        <path class="shirt-shape" d="
+        M125 75 L165 45 Q200 90 235 45 L275 75
+        L355 130 L315 195 L275 170 L275 345
+        L125 345 L125 170 L85 195 L45 130 Z"/>
+        `
+    },
+
+    right: {
+        name: "Right Side View",
+        transform: "scaleX(-0.55)",
+        shape: `
+        <path class="shirt-shape" d="
+        M125 75 L165 45 Q200 90 235 45 L275 75
+        L355 130 L315 195 L275 170 L275 345
+        L125 345 L125 170 L85 195 L45 130 Z"/>
+        `
+    },
+
+    top: {
+        name: "Top View",
+        transform: "rotate(90deg) scale(0.8)",
+        shape: `
+        <path class="shirt-shape" d="
+        M125 75 L165 45 Q200 90 235 45 L275 75
+        L355 130 L315 195 L275 170 L275 345
+        L125 345 L125 170 L85 195 L45 130 Z"/>
+        `
+    },
+
+    bottom: {
+        name: "Bottom View",
+        transform: "rotate(-90deg) scale(0.8)",
+        shape: `
+        <path class="shirt-shape" d="
+        M125 75 L165 45 Q200 90 235 45 L275 75
+        L355 130 L315 195 L275 170 L275 345
+        L125 345 L125 170 L85 195 L45 130 Z"/>
+        `
+    }
+
+};
+
+
+// Change T-shirt view
+
+buttons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        buttons.forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+        const view = views[button.dataset.view];
+
+        image.classList.add("changing");
+
+        setTimeout(() => {
+
+            drawing.innerHTML = view.shape;
+
+            drawing.setAttribute("transform", view.transform);
+
+            label.textContent = view.name;
+
+            image.classList.remove("changing");
+
+        }, 200);
+
+    });
+
+});
+
+
+// Size selection
+
+const sizes = document.querySelectorAll(".size");
+
+sizes.forEach(size => {
+
+    size.addEventListener("click", () => {
+
+        sizes.forEach(s => s.classList.remove("active"));
+
+        size.classList.add("active");
+
+    });
+
+});
+
+
+// Cart button
+
+document.getElementById("cartBtn").addEventListener("click", () => {
+
+    const selectedSize = document.querySelector(".size.active");
+
+    alert("T-Shirt added to cart! Size: " + selectedSize.textContent);
+
+});
+
+</script>
+
+</body>
+</html>

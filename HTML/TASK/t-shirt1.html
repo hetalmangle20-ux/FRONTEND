@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>T-Shirt Product Views</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: beige;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Main container */
+
+.container {
+    width: 400px;
+    text-align: center;
+}
+
+.product {
+    position: relative;
+    width: 350px;
+    height: 430px;
+    background: white;
+    border-radius: 12px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* T-shirt */
+
+.shirt {
+    width: 230px;
+    height: 260px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.shirt path {
+    fill: #e63946;
+    stroke: #222;
+    stroke-width: 3;
+    stroke-linejoin: round;
+}
+
+.shirt .detail {
+    fill: none;
+    stroke: white;
+    stroke-width: 3;
+}
+
+/* View label */
+
+.view-name {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+
+    background: #222;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+/* Navigation */
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 22px;
+    background: #222;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e63946;
+}
+
+/* Thumbnails */
+
+.thumbnails {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.thumb {
+    background: white;
+    color: #222;
+    border: 1px solid #ccc;
+    padding: 9px 12px;
+}
+
+.thumb.active {
+    background: #e63946;
+    color: white;
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>T-Shirt Collection</h2>
+
+    <div class="product" id="product">
+
+        <svg class="shirt" id="shirt" viewBox="0 0 250 250">
+
+            <g id="shirtDrawing">
+
+                <path d="
+                M75 30
+                L100 15
+                Q125 45 150 15
+                L175 30
+                L230 65
+                L200 110
+                L175 95
+                L175 235
+                L75 235
+                L75 95
+                L50 110
+                L20 65
+                Z"/>
+
+                <path class="detail"
+                d="M100 15 Q125 65 150 15"/>
+
+            </g>
+
+        </svg>
+
+        <div class="view-name" id="viewName">
+            Front View
+        </div>
+
+    </div>
+
+
+    <!-- Previous / Next buttons -->
+
+    <div class="navigation">
+
+        <button id="prev">Previous</button>
+
+        <button id="next">Next</button>
+
+    </div>
+
+
+    <!-- View selection -->
+
+    <div class="thumbnails">
+
+        <button class="thumb active" data-index="0">Front</button>
+        <button class="thumb" data-index="1">Back</button>
+        <button class="thumb" data-index="2">Left</button>
+        <button class="thumb" data-index="3">Right</button>
+        <button class="thumb" data-index="4">Top</button>
+        <button class="thumb" data-index="5">Bottom</button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const shirt = document.getElementById("shirt");
+
+const drawing = document.getElementById("shirtDrawing");
+
+const product = document.getElementById("product");
+
+const viewName = document.getElementById("viewName");
+
+const thumbs = document.querySelectorAll(".thumb");
+
+let currentIndex = 0;
+
+
+// T-shirt shape
+
+const shirtShape = `
+<path d="
+M75 30
+L100 15
+Q125 45 150 15
+L175 30
+L230 65
+L200 110
+L175 95
+L175 235
+L75 235
+L75 95
+L50 110
+L20 65
+Z"/>
+
+`;
+
+
+// Different views
+
+const views = [
+
+    {
+        name: "Front View",
+        transform: "none",
+        detail: `
+        <path class="detail"
+        d="M100 15 Q125 65 150 15"/>
+        `
+    },
+
+    {
+        name: "Back View",
+        transform: "none",
+        detail: `
+        <path class="detail"
+        d="M80 55 Q125 85 170 55"/>
+        `
+    },
+
+    {
+        name: "Left Side View",
+        transform: "scaleX(0.55)",
+        detail: ""
+    },
+
+    {
+        name: "Right Side View",
+        transform: "scaleX(-0.55)",
+        detail: ""
+    },
+
+    {
+        name: "Top View",
+        transform: "rotate(90deg) scale(0.8)",
+        detail: ""
+    },
+
+    {
+        name: "Bottom View",
+        transform: "rotate(-90deg) scale(0.8)",
+        detail: ""
+    }
+
+];
+
+
+// Display selected view
+
+function showView(index) {
+
+    currentIndex = (index + views.length) % views.length;
+
+    const view = views[currentIndex];
+
+    shirt.style.opacity = "0";
+    shirt.style.transform = "scale(0.9)";
+
+    setTimeout(() => {
+
+        drawing.innerHTML = shirtShape + view.detail;
+
+        drawing.setAttribute("transform", view.transform);
+
+        viewName.textContent = view.name;
+
+        thumbs.forEach((thumb, i) => {
+
+            thumb.classList.toggle(
+                "active",
+                i === currentIndex
+            );
+
+        });
+
+        shirt.style.opacity = "1";
+        shirt.style.transform = "scale(1)";
+
+    }, 200);
+
+}
+
+
+// Next button
+
+document.getElementById("next").addEventListener("click", () => {
+
+    showView(currentIndex + 1);
+
+});
+
+
+// Previous button
+
+document.getElementById("prev").addEventListener("click", () => {
+
+    showView(currentIndex - 1);
+
+});
+
+
+// Thumbnail click
+
+thumbs.forEach(thumb => {
+
+    thumb.addEventListener("click", () => {
+
+        showView(Number(thumb.dataset.index));
+
+    });
+
+});
+
+
+// Click on product image to see next view
+
+product.addEventListener("click", () => {
+
+    showView(currentIndex + 1);
+
+});
+
+
+// Initial view
+
+showView(0);
+
+</script>
+
+</body>
+</html>

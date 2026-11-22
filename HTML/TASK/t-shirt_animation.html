@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>T-Shirt 3D Views</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: beige;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.book {
+    --n: 6;
+    position: relative;
+    width: 350px;
+    height: 430px;
+    perspective: 1800px;
+    transition: transform 1s ease;
+}
+
+.book.open {
+    transform: translateX(175px);
+}
+
+.page {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+
+    z-index: calc(var(--n) - var(--i));
+
+    transition:
+        transform 1s ease,
+        z-index 0s 0.5s;
+}
+
+.page.flipped {
+    transform: rotateY(-180deg);
+    z-index: var(--i);
+}
+
+.face {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: white;
+    border: 2px solid #333;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    box-shadow: 3px 3px 12px #999;
+}
+
+.back {
+    transform: rotateY(180deg);
+    background: #fffdf5;
+}
+
+h2 {
+    position: absolute;
+    top: 25px;
+    color: #333;
+}
+
+/* T-shirt */
+
+.shirt {
+    width: 230px;
+    height: 260px;
+}
+
+.shirt path {
+    fill: #e63946;
+    stroke: #222;
+    stroke-width: 3;
+    stroke-linejoin: round;
+}
+
+.shirt .detail {
+    fill: none;
+    stroke: white;
+    stroke-width: 3;
+}
+
+/* View label */
+
+.view-name {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+
+    background: #f0e6d2;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+/* Side views */
+
+.side-shirt {
+    width: 130px;
+}
+
+.top-shirt {
+    width: 230px;
+    transform: rotate(90deg);
+}
+
+.bottom-shirt {
+    width: 230px;
+    transform: rotate(-90deg);
+}
+
+.instruction {
+    position: absolute;
+    bottom: -65px;
+    width: 100%;
+    text-align: center;
+    color: #555;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="book" id="book">
+
+    <!-- FRONT VIEW -->
+    <div class="page" style="--i:0">
+
+        <div class="face">
+
+            <h2>T-Shirt Collection</h2>
+
+            <svg class="shirt" viewBox="0 0 250 250">
+
+                <path d="
+                M75 30
+                L100 15
+                Q125 45 150 15
+                L175 30
+                L230 65
+                L200 110
+                L175 95
+                L175 235
+                L75 235
+                L75 95
+                L50 110
+                L20 65
+                Z"/>
+
+                <path class="detail"
+                d="M100 15 Q125 65 150 15"/>
+
+            </svg>
+
+            <div class="view-name">Front View</div>
+
+        </div>
+
+        <div class="face back">
+            <h2>Back View</h2>
+            <div class="view-name">Back View</div>
+        </div>
+
+    </div>
+
+
+    <!-- BACK VIEW -->
+    <div class="page" style="--i:1">
+
+        <div class="face">
+
+            <h2>Back View</h2>
+
+            <svg class="shirt" viewBox="0 0 250 250">
+
+                <path d="
+                M75 30
+                L100 15
+                Q125 45 150 15
+                L175 30
+                L230 65
+                L200 110
+                L175 95
+                L175 235
+                L75 235
+                L75 95
+                L50 110
+                L20 65
+                Z"/>
+
+                <path class="detail"
+                d="M80 55 Q125 85 170 55"/>
+
+            </svg>
+
+            <div class="view-name">Back View</div>
+
+        </div>
+
+        <div class="face back">
+            <h2>Left Side View</h2>
+            <div class="view-name">Left Side</div>
+        </div>
+
+    </div>
+
+
+    <!-- LEFT SIDE -->
+    <div class="page" style="--i:2">
+
+        <div class="face">
+
+            <h2>Left Side View</h2>
+
+            <svg class="shirt side-shirt" viewBox="0 0 250 250">
+
+                <path d="
+                M105 20
+                L155 20
+                L180 65
+                L160 85
+                L155 230
+                L95 230
+                L90 85
+                L70 65
+                Z"/>
+
+            </svg>
+
+            <div class="view-name">Left Side</div>
+
+        </div>
+
+        <div class="face back">
+            <h2>Right Side View</h2>
+            <div class="view-name">Right Side</div>
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT SIDE -->
+    <div class="page" style="--i:3">
+
+        <div class="face">
+
+            <h2>Right Side View</h2>
+
+            <svg class="shirt side-shirt" viewBox="0 0 250 250">
+
+                <path d="
+                M105 20
+                L155 20
+                L180 65
+                L160 85
+                L155 230
+                L95 230
+                L90 85
+                L70 65
+                Z"/>
+
+            </svg>
+
+            <div class="view-name">Right Side</div>
+
+        </div>
+
+        <div class="face back">
+            <h2>Top View</h2>
+            <div class="view-name">Top View</div>
+        </div>
+
+    </div>
+
+
+    <!-- TOP VIEW -->
+    <div class="page" style="--i:4">
+
+        <div class="face">
+
+            <h2>Top View</h2>
+
+            <svg class="shirt top-shirt" viewBox="0 0 250 250">
+
+                <path d="
+                M75 30
+                L100 15
+                Q125 45 150 15
+                L175 30
+                L230 65
+                L200 110
+                L175 95
+                L175 235
+                L75 235
+                L75 95
+                L50 110
+                L20 65
+                Z"/>
+
+            </svg>
+
+            <div class="view-name">Top View</div>
+
+        </div>
+
+        <div class="face back">
+            <h2>Bottom View</h2>
+            <div class="view-name">Bottom View</div>
+        </div>
+
+    </div>
+
+
+    <!-- BOTTOM VIEW -->
+    <div class="page" style="--i:5">
+
+        <div class="face">
+
+            <h2>Bottom View</h2>
+
+            <svg class="shirt bottom-shirt" viewBox="0 0 250 250">
+
+                <path d="
+                M75 30
+                L100 15
+                Q125 45 150 15
+                L175 30
+                L230 65
+                L200 110
+                L175 95
+                L175 235
+                L75 235
+                L75 95
+                L50 110
+                L20 65
+                Z"/>
+
+            </svg>
+
+            <div class="view-name">Bottom View</div>
+
+        </div>
+
+        <div class="face back">
+            <h2>Collection Complete!</h2>
+            <div class="view-name">End View</div>
+        </div>
+
+    </div>
+
+    <div class="instruction">
+        Click on the T-shirt page to turn views
+    </div>
+
+</div>
+
+
+<script>
+
+const book = document.getElementById("book");
+
+const pages = document.querySelectorAll(".page");
+
+pages.forEach((page, index) => {
+
+    page.addEventListener("click", () => {
+
+        page.classList.toggle("flipped");
+
+        book.classList.toggle(
+            "open",
+            pages[0].classList.contains("flipped")
+        );
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

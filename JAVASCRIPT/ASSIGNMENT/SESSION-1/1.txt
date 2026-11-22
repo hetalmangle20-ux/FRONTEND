@@ -1,0 +1,11 @@
+1. What is JavaScript?
+JavaScript is a programming language used to make websites interactive and dynamic.
+HTML	CSS	JavaScript
+Structure	Design	Functionality
+What is on the page?	How does it look?	How does it work?
+
+Example: On Instagram, HTML creates the Like button, CSS styles it, and JavaScript makes it respond when clicked.
+2. Client-side vs Server-side JavaScript
+- Client-side: JavaScript runs in the user's browser. Used for buttons, animations, form validation, etc.
+- Server-side: JavaScript runs on a server using technologies like Node.js. Used for APIs, databases, backend logic, etc.
+3. Connecting JavaScript to HTML
